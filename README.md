@@ -6,38 +6,46 @@
 
 **ECHO** is an edge–cloud framework for language-driven whole-body control of humanoid robots. A cloud-hosted diffusion-based text-to-motion generator synthesizes motion references from natural language, while an edge-deployed RL tracker executes them in closed loop on the **Unitree G1** humanoid.
 
-### How it works
+## Overview
 
-```
-                    Cloud GPU
-  ┌──────────────────────────────────────────────┐
-  │  "walk forward"  ──▶  CLIP Text Encoder      │
-  │                         │                    │
-  │                    Cross-Attention            │
-  │                         │                    │
-  │              1D Conv UNet + DDIM (10 steps)  │
-  │                         │                    │
-  │               38D motion (~1s inference)     │
-  └─────────────────────────┬────────────────────┘
-                            │  WebSocket
-      SSH Tunnel / Network  │
-                            ▼
-                    Edge (Unitree G1)
-  ┌──────────────────────────────────────────────┐
-  │  38D → NPZ converter                         │
-  │       │                                      │
-  │  ONNX Tracking Policy (PPO Teacher-Student)  │
-  │       │  29 joint targets @ 50Hz             │
-  │  PD Controller + Fall Recovery               │
-  └──────────────────────────────────────────────┘
-```
+<p align="center">
+  <img src="https://echo-phi-eight.vercel.app/static/images/carousel1.jpg" alt="ECHO Overview" width="100%">
+</p>
 
-### Key features
+**ECHO** processes natural language instructions through a CLIP-conditioned diffusion model on a cloud GPU, producing 38D robot-native motion sequences in ~1 second. The motion is streamed via WebSocket to an edge-deployed ONNX tracking policy that runs at 50 Hz on the G1 with PD control and autonomous fall recovery.
+
+---
+
+## Demo Videos
+
+### Real Robot (Unitree G1)
+
+<p align="center">
+  <video src="https://echo-phi-eight.vercel.app/real-preview/walk%205%20step.mp4" muted autoplay loop playsinline width="22%"></video>
+  <video src="https://echo-phi-eight.vercel.app/real-preview/do%20jumping%20jacks.mp4" muted autoplay loop playsinline width="22%"></video>
+  <video src="https://echo-phi-eight.vercel.app/real-preview/wave%20right%20hand.mp4" muted autoplay loop playsinline width="22%"></video>
+  <video src="https://echo-phi-eight.vercel.app/real-preview/walk%20in%20a%20circle.mp4" muted autoplay loop playsinline width="22%"></video>
+</p>
+
+### Simulation (MuJoCo)
+
+<p align="center">
+  <video src="https://echo-phi-eight.vercel.app/sim-preview/walk%205%20step.mp4" muted autoplay loop playsinline width="22%"></video>
+  <video src="https://echo-phi-eight.vercel.app/sim-preview/fly%20kick.mp4" muted autoplay loop playsinline width="22%"></video>
+  <video src="https://echo-phi-eight.vercel.app/sim-preview/a%20person%20is%20drinking%20water.mp4" muted autoplay loop playsinline width="22%"></video>
+  <video src="https://echo-phi-eight.vercel.app/sim-preview/he%20is%20running%20straight%20and%20stopped.mp4" muted autoplay loop playsinline width="22%"></video>
+</p>
+
+> More videos on the [project page](https://echo-phi-eight.vercel.app).
+
+---
+
+## Key Features
 
 - **Robot-native**: generates directly in G1 29-DOF joint space — no human body model, no retargeting
 - **38D velocity-based representation**: joint angles + root velocity + root height + continuous 6D rotation
 - **Classifier-free guidance**: DDIM sampling with 10 denoising steps produces motions in ~1 second on cloud GPU
-- **Edge deployment**: ONNX tracking policy runs on CPU at 50Hz with PD control and autonomous fall recovery
+- **Edge deployment**: ONNX tracking policy runs on CPU at 50 Hz with PD control and autonomous fall recovery
 
 ---
 
@@ -87,15 +95,6 @@ python scripts/generate_robot.py \
 ```
 
 Output: `output/npz/000000.npz` with `joint_pos (T,29)`, `root_pos (T,3)`, `root_rot (T,4)`.
-
-Batch generation from file:
-
-```bash
-python scripts/generate_robot.py \
-    --opt_path ../checkpoints/checkpoints/robotv2/robotv2_38d_lite/opt.txt \
-    --input_text prompts.txt \
-    --motion_length 4.0
-```
 
 ### Start WebSocket server (cloud)
 
