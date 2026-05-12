@@ -1,0 +1,119 @@
+policy_path: "assets/ckpts/G1TRACKING-02-15_15-40/policy.onnx"
+lowstate_alpha: 1.0
+compliance_flag_value: 0.0 # 0.0 to disable compliance, 1.0 to enable compliance
+compliance_flag_threshold: 10.0 # 10.0 ~ 20.0
+
+motions:
+  - name: "dance1_subject1"
+    path: "assets/data/dance1_subject1.npz"
+    start: 0
+    end: -1
+  - name: "dance2_subject1"
+    path: "assets/data/dance2_subject1.npz"
+    start: 0
+    end: -1
+  - name: "fallAndGetUp1_subject1"
+    path: "assets/data/fallAndGetUp1_subject1.npz"
+    start: 0
+    end: -1
+  - name: "fallAndGetUp2_subject2"
+    path: "assets/data/fallAndGetUp2_subject2.npz"
+    start: 0
+    end: -1
+  - name: "fight1_subject2"
+    path: "assets/data/fight1_subject2.npz"
+    start: 0
+    end: -1
+  - name: "fightAndSports1_subject1"
+    path: "assets/data/fightAndSports1_subject1.npz"
+    start: 0
+    end: -1
+  - name: "jumps1_subject1"
+    path: "assets/data/jumps1_subject1.npz"
+    start: 0
+    end: -1
+  - name: "run1_subject2"
+    path: "assets/data/run1_subject2.npz"
+    start: 0
+    end: -1
+  - name: "run2_subject1"
+    path: "assets/data/run2_subject1.npz"
+    start: 0
+    end: -1
+  - name: "sprint1_subject2"
+    path: "assets/data/sprint1_subject2.npz"
+    start: 0
+    end: -1
+  - name: "walk1_subject1"
+    path: "assets/data/walk1_subject1.npz"
+    start: 0
+    end: -1
+  - name: "walk2_subject1"
+    path: "assets/data/walk2_subject1.npz"
+    start: 0
+    end: -1
+  - name: "walk3_subject1"
+    path: "assets/data/walk3_subject1.npz"
+    start: 0
+    end: -1
+motion_clips:
+  - name: "default"
+    joint_pos: [-0.2800000011920929, 0.0, 0.0, 0.5, -0.23000000417232513, 0.0, -0.2800000011920929, 0.0, 0.0, 0.5, -0.23000000417232513, 0.0, 0.0, 0.0, 0.0, 0.3499999940395355, 0.1599999964237213, 0.0, 0.8700000047683716, 0.0, 0.0, 0.0, 0.3499999940395355, -0.1599999964237213, 0.0, 0.8700000047683716, 0.0, 0.0, 0.0]
+    root_quat: [1., 0., 0., 0.]
+    root_pos: [0.0, 0.0, 0.78]
+
+action_alpha: 0.9
+action_clip: 10.0
+adapt_hx_size: 256
+
+action_joint_names: ['left_hip_pitch_joint', 'right_hip_pitch_joint', 'waist_yaw_joint', 'left_hip_roll_joint', 'right_hip_roll_joint', 'waist_roll_joint', 'left_hip_yaw_joint', 'right_hip_yaw_joint', 'waist_pitch_joint', 'left_knee_joint', 'right_knee_joint', 'left_shoulder_pitch_joint', 'right_shoulder_pitch_joint', 'left_ankle_pitch_joint', 'right_ankle_pitch_joint', 'left_shoulder_roll_joint', 'right_shoulder_roll_joint', 'left_ankle_roll_joint', 'right_ankle_roll_joint', 'left_shoulder_yaw_joint', 'right_shoulder_yaw_joint', 'left_elbow_joint', 'right_elbow_joint', 'left_wrist_roll_joint', 'right_wrist_roll_joint', 'left_wrist_pitch_joint', 'right_wrist_pitch_joint', 'left_wrist_yaw_joint', 'right_wrist_yaw_joint']
+
+action_scale: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1.0, 1.0, 0.5, 0.5, 1.0, 1.0, 0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0] # AMASS model action scale
+
+dataset_joint_names: ["left_hip_pitch_joint", "left_hip_roll_joint", "left_hip_yaw_joint", "left_knee_joint", "left_ankle_pitch_joint", "left_ankle_roll_joint", "right_hip_pitch_joint", "right_hip_roll_joint", "right_hip_yaw_joint", "right_knee_joint", "right_ankle_pitch_joint", "right_ankle_roll_joint", "waist_yaw_joint", "waist_roll_joint", "waist_pitch_joint", "left_shoulder_pitch_joint", "left_shoulder_roll_joint", "left_shoulder_yaw_joint", "left_elbow_joint", "left_wrist_roll_joint", "left_wrist_pitch_joint", "left_wrist_yaw_joint", "right_shoulder_pitch_joint", "right_shoulder_roll_joint", "right_shoulder_yaw_joint", "right_elbow_joint", "right_wrist_roll_joint", "right_wrist_pitch_joint", "right_wrist_yaw_joint"]
+
+kps_real: [
+  # left leg
+  40.17923847137318, 99.09842777666113, 40.17923847137318, 99.09842777666113, 28.50124619574858, 28.50124619574858,
+  # right leg
+  40.17923847137318, 99.09842777666113, 40.17923847137318, 99.09842777666113, 28.50124619574858, 28.50124619574858,
+  # waist
+  40.17923847137318, 28.50124619574858, 28.50124619574858,
+  # left arm
+  14.25062309787429, 14.25062309787429, 14.25062309787429, 14.25062309787429, 14.25062309787429, 16.77832748089279, 16.77832748089279,
+  # right arm
+  14.25062309787429, 14.25062309787429, 14.25062309787429, 14.25062309787429, 14.25062309787429, 16.77832748089279, 16.77832748089279,
+]
+
+kds_real: [
+  # left leg
+  2.5578897650279457, 6.3088018534966395, 2.5578897650279457, 6.3088018534966395, 1.814445686584846, 1.814445686584846,
+  # right leg
+  2.5578897650279457, 6.3088018534966395, 2.5578897650279457, 6.3088018534966395, 1.814445686584846, 1.814445686584846,
+  # waist
+  2.5578897650279457, 1.814445686584846, 1.814445686584846,
+  # left arm
+  0.907222843292423, 0.907222843292423, 0.907222843292423, 0.907222843292423, 0.907222843292423, 1.06814150219, 1.06814150219,
+  # right arm
+  0.907222843292423, 0.907222843292423, 0.907222843292423, 0.907222843292423, 0.907222843292423, 1.06814150219, 1.06814150219,
+]
+
+# UDP status feedback port (policy.py → text_to_motion.py)
+status_port: 28563
+
+text_to_motion:
+  enable: true
+  ws_host: "127.0.0.1"       # WebSocket地址 (通过SSH隧道转发)
+  ws_port: 7000
+  remote_server:
+    host: "14.103.233.39"    # 远程服务器 StableMoFusion
+    port: 29020
+    user: "root"
+    ssh_alias: "4090-2"
+  default_motion_length: 8.0     # 默认动作长度（秒）
+  default_inference_steps: 10    # 推理步数（10=快速，50=高质量）
+  adaptive_smooth: true          # 自适应平滑
+  static_start: true             # 强制静态起始
+  static_frames: 2               # 静态帧数
+  blend_frames: 8                # 混合帧数
+  auto_default_on_complete: true # 动作完成后自动切换default

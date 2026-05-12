@@ -1,0 +1,47 @@
+# Robot MoCLIP Training Configuration
+
+# Dataset configuration
+dataset_name: robot
+data_root: ./robot_humanml_data
+input_dim: 38
+max_seq_length: 490
+min_motion_len: 100
+
+# Model configuration
+embed_dim: 768  # Match CLIP-ViT-Large
+num_heads: 8
+num_layers: 4
+dim_feedforward: 2048
+dropout: 0.2
+clip_model_name: "ViT-L/14"  # OpenAI CLIP model name (or "openai/clip-vit-large-patch14" for HF CLIP)
+use_openai_clip: true  # Set to true to use OpenAI CLIP (same as models/unet.py), false for Hugging Face CLIP
+temperature: 0.07
+freeze_clip: true
+
+# Training configuration
+batch_size: 32
+lr: 0.0001
+weight_decay: 0.0001
+num_epochs: 300
+warmup_epochs: 5
+save_interval: 10
+eval_interval: 5
+
+# Optimizer configuration
+optimizer: adamw
+scheduler: cosine
+min_lr: 0.00001
+
+# Hardware configuration
+device: cuda
+num_workers: 4
+pin_memory: true
+
+# Checkpoint configuration
+checkpoint_dir: ./checkpoints/robot_evaluator
+resume_from: null  # Path to checkpoint to resume from (if any)
+
+# Evaluation configuration
+eval_sample_size: 32  # Batch size for computing retrieval metrics
+max_length: 77  # CLIP tokenizer max length
+

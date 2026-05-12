@@ -1,0 +1,14 @@
+checkpoints/
+weights_repo/
+__pycache__/
+*.pyc
+.venv/
+generator/checkpoints/*.tar
+wandb/
+outputs/
+output/
+*.mp4
+deploy/assets/data/
+deploy/assets/g1/*.xml
+deploy/assets/g1/*.stl
+.env

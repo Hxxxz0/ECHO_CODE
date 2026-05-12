@@ -1,0 +1,2 @@
+from .evaluator_wrapper import MoCLIPEvaluatorWrapper
+from .eval_robot_moclip import evaluation_moclip

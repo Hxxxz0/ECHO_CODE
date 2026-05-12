@@ -1,0 +1,90 @@
+#
+control_freq: 50
+
+lowstate_alpha: 1.0
+joint_slew_rate: 100.0
+
+lowcmd_topic: "rt/lowcmd"
+lowstate_topic: "rt/lowstate"
+
+render_gui: true          # Show real-time GUI for debugging
+
+# state always has 29 dof
+isaac_joint_names_state: ['left_hip_pitch_joint', 'right_hip_pitch_joint', 'waist_yaw_joint', 'left_hip_roll_joint', 'right_hip_roll_joint', 'waist_roll_joint', 'left_hip_yaw_joint', 'right_hip_yaw_joint', 'waist_pitch_joint', 'left_knee_joint', 'right_knee_joint', 'left_shoulder_pitch_joint', 'right_shoulder_pitch_joint', 'left_ankle_pitch_joint', 'right_ankle_pitch_joint', 'left_shoulder_roll_joint', 'right_shoulder_roll_joint', 'left_ankle_roll_joint', 'right_ankle_roll_joint', 'left_shoulder_yaw_joint', 'right_shoulder_yaw_joint', 'left_elbow_joint', 'right_elbow_joint', 'left_wrist_roll_joint', 'right_wrist_roll_joint', 'left_wrist_pitch_joint', 'right_wrist_pitch_joint', 'left_wrist_yaw_joint', 'right_wrist_yaw_joint']
+
+# Real robot joint names
+real_joint_names: [
+  "left_hip_pitch_joint", "left_hip_roll_joint", "left_hip_yaw_joint", "left_knee_joint", "left_ankle_pitch_joint", "left_ankle_roll_joint",
+  "right_hip_pitch_joint", "right_hip_roll_joint", "right_hip_yaw_joint", "right_knee_joint", "right_ankle_pitch_joint", "right_ankle_roll_joint",
+  "waist_yaw_joint", "waist_roll_joint", "waist_pitch_joint",
+  "left_shoulder_pitch_joint", "left_shoulder_roll_joint", "left_shoulder_yaw_joint", "left_elbow_joint", "left_wrist_roll_joint", "left_wrist_pitch_joint", "left_wrist_yaw_joint",
+  "right_shoulder_pitch_joint", "right_shoulder_roll_joint", "right_shoulder_yaw_joint", "right_elbow_joint", "right_wrist_roll_joint", "right_wrist_pitch_joint", "right_wrist_yaw_joint"
+]
+
+# Mujoco joint names
+mujoco_joint_names: [
+  "left_hip_pitch_joint", "left_hip_roll_joint", "left_hip_yaw_joint", "left_knee_joint", "left_ankle_pitch_joint", "left_ankle_roll_joint",
+  "right_hip_pitch_joint", "right_hip_roll_joint", "right_hip_yaw_joint", "right_knee_joint", "right_ankle_pitch_joint", "right_ankle_roll_joint",
+  "waist_yaw_joint", "waist_roll_joint", "waist_pitch_joint",
+  "left_shoulder_pitch_joint", "left_shoulder_roll_joint", "left_shoulder_yaw_joint", "left_elbow_joint", "left_wrist_roll_joint", "left_wrist_pitch_joint", "left_wrist_yaw_joint",
+  "right_shoulder_pitch_joint", "right_shoulder_roll_joint", "right_shoulder_yaw_joint", "right_elbow_joint", "right_wrist_roll_joint", "right_wrist_pitch_joint", "right_wrist_yaw_joint"
+]
+
+
+kps_real: [
+  # left leg
+  40.17923847137318, 99.09842777666113, 40.17923847137318, 99.09842777666113, 28.50124619574858, 28.50124619574858,
+  # right leg
+  40.17923847137318, 99.09842777666113, 40.17923847137318, 99.09842777666113, 28.50124619574858, 28.50124619574858,
+  # waist
+  40.17923847137318, 28.50124619574858, 28.50124619574858,
+  # left arm
+  14.25062309787429, 14.25062309787429, 14.25062309787429, 14.25062309787429, 14.25062309787429, 16.77832748089279, 16.77832748089279,
+  # right arm
+  14.25062309787429, 14.25062309787429, 14.25062309787429, 14.25062309787429, 14.25062309787429, 16.77832748089279, 16.77832748089279,
+]
+
+kds_real: [
+  # left leg
+  2.5578897650279457, 6.3088018534966395, 2.5578897650279457, 6.3088018534966395, 1.814445686584846, 1.814445686584846,
+  # right leg
+  2.5578897650279457, 6.3088018534966395, 2.5578897650279457, 6.3088018534966395, 1.814445686584846, 1.814445686584846,
+  # waist
+  2.5578897650279457, 1.814445686584846, 1.814445686584846,
+  # left arm
+  0.907222843292423, 0.907222843292423, 0.907222843292423, 0.907222843292423, 0.907222843292423, 1.06814150219, 1.06814150219,
+  # right arm
+  0.907222843292423, 0.907222843292423, 0.907222843292423, 0.907222843292423, 0.907222843292423, 1.06814150219, 1.06814150219,
+]
+
+default_qpos_real: [
+  -0.28, 0, 0, 0.5, -0.23, 0,         # left leg
+  -0.28, 0, 0, 0.5, -0.23, 0,         # right leg
+  0, 0, 0,                  # waist
+  0.35, 0.16, 0, 0.87, 0, 0, 0,  # left arm
+  0.35, -0.16, 0, 0.87, 0, 0, 0, # right arm
+]
+
+init_qpos_real: [
+  -0.28, 0, 0, 0.5, -0.23, 0,         # left leg
+  -0.28, 0, 0, 0.5, -0.23, 0,         # right leg
+  0, 0, 0,                  # waist
+  0.35, 0.16, 0, 0.87, 0, 0, 0,  # left arm
+  0.35, -0.16, 0, 0.87, 0, 0, 0, # right arm
+]
+
+motor_limits_low_real: [
+  -2.5307, -0.5236, -2.7576, -0.087267, -0.87267, -0.2618,    # left leg
+  -2.5307, -2.9671, -2.7576, -0.087267, -0.87267, -0.2618,    # right leg
+  -2.618, -0.52, -0.52,                                        # waist
+  -3.0892, -1.5882, -2.618, -1.0472, -1.97222, -1.61443, -1.61443,  # left arm
+  -3.0892, -2.2515, -2.618, -1.0472, -1.97222, -1.61443, -1.61443,  # right arm
+]
+
+motor_limits_high_real: [
+  2.8798, 2.9671, 2.7576, 2.8798, 0.5236, 0.2618,     # left leg
+  2.8798, 0.5236, 2.7576, 2.8798, 0.5236, 0.2618,     # right leg
+  2.618, 0.52, 0.52,                                   # waist
+  2.6704, 2.2515, 2.618, 2.0944, 1.97222, 1.61443, 1.61443,  # left arm
+  2.6704, 1.5882, 2.618, 2.0944, 1.97222, 1.61443, 1.61443,  # right arm
+]
