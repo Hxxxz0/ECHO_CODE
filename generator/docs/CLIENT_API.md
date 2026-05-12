@@ -1,6 +1,6 @@
-# Robot Motion Generation Client API Documentation
+# ECHO Motion Generation Client API
 
-This document provides comprehensive guidance for integrating with the Robot Motion Generation WebSocket server. The server provides text-to-motion generation capabilities, returning motion data in NPZ format suitable for robot control and visualization.
+Integration guide for the ECHO cloud generator WebSocket server. Text-to-motion generation returning 38D NPZ data for robot control.
 
 ---
 
@@ -53,7 +53,7 @@ Response:
 ```json
 {
   "status": "running",
-  "service": "Robot Motion Generation Server",
+  "service": "ECHO Motion Generation Server",
   "model_iteration": 50304,
   "dim_pose": 38,
   "fps": 50
@@ -101,13 +101,9 @@ Clients send JSON-formatted text messages to the WebSocket endpoint.
 | `static_frames` | int | No | 2 | Number of completely static frames at start |
 | `blend_frames` | int | No | 8 | Number of frames to blend from static to motion |
 
-### Smoothing Default Behavior
+### Smoothing Default
 
-The `smooth` parameter has format-specific defaults:
-- **38D format** (minimal representation): `smooth=false` by default
-- **239D format** (complete representation): `smooth=true` by default
-
-The server automatically uses the correct default based on the model's `dim_pose` configuration. You can override by explicitly setting `smooth: true` or `smooth: false`.
+The `smooth` parameter defaults to `false`. Enable `adaptive_smooth` and `static_start` for smoother output with reduced initial jitter.
 
 ### Valid Value Ranges
 
@@ -126,7 +122,7 @@ The server responds with either **binary NPZ data** (success) or **JSON error me
 
 **Content Type:** Binary (application/octet-stream)
 
-The response is a compressed NumPy NPZ file containing multiple arrays. The specific fields depend on the model's format (38D or 239D).
+The response is a compressed NumPy NPZ file containing `joint_pos`, `root_pos`, and `root_rot` arrays in 38D format.
 
 ### Error Response: JSON
 
@@ -223,125 +219,23 @@ For 4.0 second motion at 50 FPS (200 frames):
   root_rot: (200, 4) = 200 frames × quaternion
 ```
 
-### 239D Format (Complete Representation)
-
-Used for full-body simulation with all link positions and orientations.
-
-**Fields:**
-
-| Field | Shape | Type | Description |
-|-------|-------|------|-------------|
-| `fps` | (1,) | int32 | Frame rate (always 50) |
-| `joint_pos` | (T, 29) | float32 | Joint angles in radians |
-| `joint_vel` | (T, 29) | float32 | Joint angular velocities in rad/s |
-| `body_pos_w` | (T, 30, 3) | float32 | Body link positions in world frame [x, y, z] |
-| `body_quat_w` | (T, 30, 4) | float32 | Body link orientations [w, x, y, z] |
-| `body_lin_vel_w` | (T, 30, 3) | float32 | Body linear velocities [vx, vy, vz] in m/s |
-| `body_ang_vel_w` | (T, 30, 3) | float32 | Body angular velocities [wx, wy, wz] in rad/s |
-
-**Notes:**
-- 30 bodies/links represent the complete robot skeleton
-- All positions and velocities are in world frame
-- Velocities are computed from finite differences
-
-**Example Data Shapes:**
-```
-For 4.0 second motion at 50 FPS (200 frames):
-  fps: (1,) = [50]
-  joint_pos: (200, 29)
-  joint_vel: (200, 29)
-  body_pos_w: (200, 30, 3) = 200 frames × 30 bodies × XYZ
-  body_quat_w: (200, 30, 4) = 200 frames × 30 bodies × quaternion
-  body_lin_vel_w: (200, 30, 3)
-  body_ang_vel_w: (200, 30, 3)
-```
-
----
-
-## 5. Visualization Guidelines
-
-### Robot Skeleton Topology
-
-The robot has 30 bodies/links arranged in a tree structure. While the exact parent-child relationships depend on the specific robot model, typical structure:
-
-```
-Root (body 0: base/pelvis)
-├── Torso chain (bodies 1-5)
-│   ├── Left arm chain (bodies 6-11)
-│   └── Right arm chain (bodies 12-17)
-└── Leg chains
-    ├── Left leg (bodies 18-23)
-    └── Right leg (bodies 24-29)
-```
-
-### Rendering Loop (Pseudo-code)
+## 5. Visualization
 
 ```python
 def animate_motion(npz_data):
     fps = int(npz_data['fps'][0])
     dt = 1.0 / fps
-    
-    # For 38D format
-    if 'root_pos' in npz_data:
-        root_pos = npz_data['root_pos']  # (T, 3)
-        root_rot = npz_data['root_rot']  # (T, 4)
-        joint_pos = npz_data['joint_pos']  # (T, 29)
-        
-        for t in range(len(root_pos)):
-            # Update root transform
-            set_root_position(root_pos[t])
-            set_root_rotation(root_rot[t])
-            
-            # Update joint angles
-            for j in range(29):
-                set_joint_angle(j, joint_pos[t, j])
-            
-            render_frame()
-            sleep(dt)
-    
-    # For 239D format
-    elif 'body_pos_w' in npz_data:
-        body_pos = npz_data['body_pos_w']  # (T, 30, 3)
-        body_rot = npz_data['body_quat_w']  # (T, 30, 4)
-        
-        for t in range(len(body_pos)):
-            # Update all body transforms
-            for b in range(30):
-                set_body_position(b, body_pos[t, b])
-                set_body_rotation(b, body_rot[t, b])
-            
-            render_frame()
-            sleep(dt)
-```
+    root_pos = npz_data['root_pos']   # (T, 3)
+    root_rot = npz_data['root_rot']   # (T, 4)
+    joint_pos = npz_data['joint_pos'] # (T, 29)
 
-### Skeleton Visualization
-
-For 3D visualization libraries (matplotlib, mayavi, three.js):
-
-```python
-# Example: Simple skeleton visualization
-def draw_skeleton(body_positions):
-    """
-    body_positions: (30, 3) array of body positions for single frame
-    """
-    # Define skeleton connections (example - adjust for your robot)
-    connections = [
-        (0, 1), (1, 2), (2, 3),  # Spine
-        (3, 6), (6, 7), (7, 8),  # Left arm
-        (3, 12), (12, 13), (13, 14),  # Right arm
-        (0, 18), (18, 19), (19, 20),  # Left leg
-        (0, 24), (24, 25), (25, 26),  # Right leg
-        # ... add more connections
-    ]
-    
-    for (start_idx, end_idx) in connections:
-        start_pos = body_positions[start_idx]
-        end_pos = body_positions[end_idx]
-        draw_line(start_pos, end_pos, color='blue', width=2)
-    
-    # Draw joints as spheres
-    for pos in body_positions:
-        draw_sphere(pos, radius=0.02, color='red')
+    for t in range(len(root_pos)):
+        set_root_position(root_pos[t])
+        set_root_rotation(root_rot[t])
+        for j in range(29):
+            set_joint_angle(j, joint_pos[t, j])
+        render_frame()
+        sleep(dt)
 ```
 
 ---
@@ -632,9 +526,7 @@ private:
   - For parallel generation, open multiple WebSocket connections
   - Server is thread-safe and can handle concurrent connections
 
-- **Data Size:** NPZ response sizes:
-  - 38D format: ~50-500 KB for 4-second motion
-  - 239D format: ~500 KB - 5 MB for 4-second motion
+- **Data Size:** NPZ response ~50-500 KB for 4-second motion
 
 ---
 
@@ -649,5 +541,5 @@ For issues or questions:
 ---
 
 **Last Updated:** 2026-02-04  
-**Server Version:** Compatible with StableMoFusion robot models (38D/239D)
+**Server Version:** ECHO 38D robot motion generation
 

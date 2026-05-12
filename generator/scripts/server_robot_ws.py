@@ -240,7 +240,7 @@ async def root():
     """Health check endpoint."""
     return {
         "status": "running",
-        "service": "Robot Motion Generation Server",
+        "service": "ECHO Motion Generation Server",
         "model_iteration": server_instance.niter if server_instance else None,
         "dim_pose": server_instance.opt.dim_pose if server_instance else None,
         "fps": server_instance.opt.fps if server_instance else None
