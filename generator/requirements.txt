@@ -1,17 +1,19 @@
-# Core dependencies
+# Core
 torch
-tqdm
-scipy
 numpy
-matplotlib>=3.7.0
-accelerate
-transformers
+scipy
+pyyaml
 einops
-diffusers>=0.21.0,<0.30.0
+tqdm
+Pillow
+accelerate
+diffusers>=0.21.0
+matplotlib
 git+https://github.com/openai/CLIP.git
 
-# Training
+# Training / eval (optional)
 tensorboard
+transformers
 
-# For WebSocket deployment server, also install:
+# For WebSocket server, also install:
 # pip install -r requirements_server.txt
