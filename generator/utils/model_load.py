@@ -9,7 +9,7 @@ def load_model_weights(model, ckpt_path, use_ema=True, device='cuda:0'):
         ckpt_path (str): Path to the checkpoint file.
         use_ema (bool): Whether to use Exponential Moving Average (EMA) weights if available.
     """
-    checkpoint = torch.load(ckpt_path,map_location={'cuda:0': str(device)})
+    checkpoint = torch.load(ckpt_path, map_location={'cuda:0': str(device)}, weights_only=False)
     total_iter = checkpoint.get('total_it', 0)
 
     if "model_ema" in checkpoint and use_ema:

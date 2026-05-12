@@ -69,7 +69,7 @@ class DiffusePipeline(object):
 
         return sample
 
-    def generate(self, caption, m_lens, batch_size=32):
+    def generate(self, caption, m_lens, batch_size=32, timing=False):
         N = len(caption)
         infer_mode = ''
         if  getattr(self.model, 'cond_mask_prob', 0) > 0:
@@ -87,25 +87,26 @@ class DiffusePipeline(object):
             else:
                 batch_caption = caption[cur_idx: cur_idx + batch_size]
                 batch_m_lens = m_lens[cur_idx: cur_idx + batch_size]
-            torch.cuda.synchronize() 
-            start_time = time.time()
+            if timing:
+                torch.cuda.synchronize()
+                start_time = time.time()
             output = self.generate_batch(batch_caption, batch_m_lens)
-            torch.cuda.synchronize() 
-            now_time = time.time()
-            
-            # The average inference time is calculated after GPU warm-up in the first 50 steps.
-            if (bacth_idx+1) * self.num_inference_steps >= 50:
-                t_sum += now_time-start_time
+            if timing:
+                torch.cuda.synchronize()
+                now_time = time.time()
+                if (bacth_idx+1) * self.num_inference_steps >= 50:
+                    t_sum += now_time-start_time
 
-            # Crop motion with gt/predicted motion length
+            # Crop motion with predicted motion length
             B = output.shape[0]
             for i in range(B):
                 all_output.append(output[i,:batch_m_lens[i]])
 
             cur_idx += batch_size
 
-        # calcalate average inference time
-        t_eval = t_sum/(bacth_idx-1)
-        print('The average generation time of a batch motion (bs=%d) is %f seconds'%(batch_size,t_eval))
-        return all_output, t_eval
+        if timing:
+            t_eval = t_sum/(bacth_idx-1)
+            print('The average generation time of a batch motion (bs=%d) is %f seconds'%(batch_size,t_eval))
+            return all_output, t_eval
+        return all_output
 

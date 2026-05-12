@@ -120,7 +120,7 @@ class RobotGeneratedEvalDataset(Dataset):
         # Generate all motions in batch
         print(f"Generating {len(all_captions)} motions...")
         with torch.no_grad():
-            all_pred_motions, t_eval = pipeline.generate(all_captions, all_m_lens)
+            all_pred_motions, t_eval = pipeline.generate(all_captions, all_m_lens, timing=True)
         
         self.eval_generate_time = t_eval
         
