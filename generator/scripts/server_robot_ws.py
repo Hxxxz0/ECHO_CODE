@@ -232,7 +232,7 @@ class MotionGenerationServer:
 server_instance: Optional[MotionGenerationServer] = None
 
 # FastAPI app
-app = FastAPI(title="Robot Motion Generation Server")
+app = FastAPI(title="ECHO Motion Generation Server")
 
 
 @app.get("/")
