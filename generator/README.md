@@ -121,9 +121,14 @@ Cloud GPU                          Edge (Unitree G1)
 ## Citation
 
 ```bibtex
-@article{echo2025,
-  title={ECHO: Edge-Cloud Humanoid Orchestration for Language-to-Motion Control},
-  year={2025}
+@misc{jia2026echoedgecloudhumanoidorchestration,
+      title={ECHO: Edge-Cloud Humanoid Orchestration for Language-to-Motion Control},
+      author={Haozhe Jia and Jianfei Song and Yuan Zhang and Honglei Jin and Youcheng Fan and Wenshuo Chen and Wei Zhang and Yutao Yue},
+      year={2026},
+      eprint={2603.16188},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2603.16188},
 }
 ```
 
